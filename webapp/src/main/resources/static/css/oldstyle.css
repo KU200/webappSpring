@@ -1,0 +1,31 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #dee0e2;
+}
+
+.info_table{
+  border: 3px solid grey;
+  background-color: antiquewhite;
+  text-align: center;
+  margin-left: 60px;
+  margin-right: 60px;
+}
+.home_table{
+  border: 3px solid grey;
+  background-color: antiquewhite;
+  text-align: center;
+  margin:auto;
+}
+.footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(190, 190, 210);
+  text-align: center;
+}
+.link{
+  padding: 0 50px 0;
+}
+
+

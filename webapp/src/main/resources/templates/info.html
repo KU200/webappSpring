@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link rel="stylesheet" href="css\style.css"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Обе SQL Таблицы</title>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-light bg-light">
+        <form class="container justify-content-start">
+            <button class="navbar-toggler" type="button">
+                <a href="../home.html" th:href="@{/}">На главную</a></button>
+            <button type="button" class="btn btn-light">
+                <button type="button" class="btn btn-light">
+                    <a href="../ads.html" th:href="@{/ads}">Обьявления</a></button>
+                <a class="link" href="../campaigns.html" th:href="@{/campaigns}">Кампании</a></button>
+        </form>
+    </nav>
+</header>
+<div class="container" style="padding-top: 20px;">
+<div class="row">
+<div class="col"><h2 align="center">Обьявления</h2>
+    <table class="table">
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>status</th>
+            <th>asset url</th>
+        </tr>
+        <tr th:each="ad : ${ads}">
+            <td th:text="${ad.id}">id</td>
+            <td th:text="${ad.name}">name</td>
+            <td th:text="${ad.status}">status</td>
+            <td th:text="${ad.assetUrl}">asset_url</td>
+        </tr>
+    </table></div>
+<div class="col"> <h2 align="center">Кампании</h2>
+    <table class="table">
+        <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>status</th>
+            <th>start date</th>
+            <th>end date</th>
+        </tr>
+        <tr th:each="campaign : ${campaigns}">
+            <td th:text="${campaign.id}">id</td>
+            <td class="cell" th:text="${campaign.name}">name</td>
+            <td th:text="${campaign.status}">status</td>
+            <td class="cell" th:text="${campaign.startDate}">start_date</td>
+            <td class="cell" th:text="${campaign.endDate}">end_date</td>
+        </tr>
+    </table></div>
+</div></div>
+</body>
+</html>
