@@ -5,13 +5,12 @@
 <link rel="stylesheet" href="/css/style.css"/>
 <head>
     <meta charset="UTF-8">
-    <title>Редактирование кампании</title>
+    <title>Создание обьявления</title>
 </head>
 <body>
 <header>
     <nav class="navbar navbar-light bg-light">
         <form class="container justify-content-start">
-            <div class="caption"><h2>Редактирование кампании <span th:text="${campaign.name}"></span></h2></div>
             <button class="navbar-toggler" type="button">
                 <a href="../home.html" th:href="@{/}">На главную</a></button>
             <button type="button" class="btn btn-light">
@@ -23,15 +22,12 @@
         </form>
     </nav>
 </header>
-<div th:each="el : ${campaign}" class="container justify-content-start">
-    <form method="post">
-        <input type="text" th:value="${el.name}" name="name" placeholder="Введите название кампании"
-               class="form-control">
-        <input type="text" th:value="${el.startDate}" name="startDate" placeholder="Введите дату начала"
-               class="form-control">
-        <input type="text" th:value="${el.endDate}" name="endDate" placeholder="Введите дату окончания"
-               class="form-control">
-        <button type="submit" class="btn btn-success">Редактировать</button>
+<div class="container justify-content-start">
+    <h3>Добавление обьявления в кампанию <span th:text="${campaign.name}"></span></h3>
+    <form th:action="'/campaigns/' + ${campaign.id} + '/ad-add'" method="post">
+        <input type="text" name="name" placeholder="Введите название обьявления" class="form-control">
+        <input type="text" name="assetUrl" placeholder="Введите ссылку на рекламу" class="form-control">
+        <button type="submit" class="btn btn-success">Добавить обьявление</button>
     </form>
 </div>
 </body>

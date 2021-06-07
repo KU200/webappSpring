@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
+
 @Controller
 public class AdController {
     @Autowired
@@ -23,7 +26,7 @@ public class AdController {
 
     @GetMapping("/ads")
     public String adsInfo(Model model) {
-        Iterable<Ad> ads = adRepository.findAll();
+        List<Ad> ads = adRepository.findAll();
         model.addAttribute("ads", ads);
         return "ads";
     }
@@ -38,8 +41,7 @@ public class AdController {
         Campaign campaign = campaignRepository.findById(campaignId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Campaign having id " + campaignId + " not found"));
-        Ad ad = new Ad(name,assetUrl);
-        ad.setCampaign(campaign);
+        Ad ad = new Ad(name, assetUrl,campaign);
         adRepository.save(ad);
         return "redirect:/ads";
     }

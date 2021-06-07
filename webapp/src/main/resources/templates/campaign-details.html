@@ -12,7 +12,7 @@
     <nav class="navbar navbar-light bg-light">
         <form class="container justify-content-start">
             <div class="caption">
-                <h2 th:text="${#strings.capitalize(campaign.name)}"></h2></div>
+                <h3 class="caption">Кампания <span th:text="${#strings.capitalize(campaign.name)}"></span></h3></div>
             <button class="navbar-toggler" type="button">
                 <a href="../home.html" th:href="@{/}">На главную</a></button>
             <button ctype="button" class="btn btn-light">
@@ -42,7 +42,7 @@
         <td><a th:href="'/campaigns/'+${campaign.id}+'/edit'">Редактировать</a></td>
         <td>
             <button class="btn btn-success">
-                <a class="p-2 text-light" th:href="'/campaigns/'+${campaign.id}+'/add-ad'">Добавить обьявление</a>
+                <a class="p-2 text-light" th:href="'/campaigns/'+${campaign.id}+'/ad-add'">Добавить обьявление</a>
             </button>
         </td>
         <td>

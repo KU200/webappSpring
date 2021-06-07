@@ -8,7 +8,5 @@ import org.springframework.data.repository.query.Param;
 public interface CampaignRepository extends JpaRepository<Campaign, Integer> {
 
     @Query("select b from Campaign b where b.name = :name")
-   Campaign findByName(@Param("name") String name);
-
-
+    Campaign findByName(@Param("name") String name);
 }

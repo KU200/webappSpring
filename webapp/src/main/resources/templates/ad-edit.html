@@ -28,7 +28,7 @@
            class="form-control">
     <input type="text" th:value="${el.assetUrl}" name="assetUrl" placeholder="Введите ссылку на рекламу"
            class="form-control">
-    <input type="text" th:value="${campaignId}" name="campaignId" placeholder="Введите id капании к которой будет пренадлежать ваше обьявление"
+    <input type="text" th:value="${el.campaign.id}" name="campaignId" placeholder="Введите id капании к которой будет пренадлежать ваше обьявление"
            class="form-control">
     <button type="submit" class="btn btn-success">Редактировать</button>
   </form>

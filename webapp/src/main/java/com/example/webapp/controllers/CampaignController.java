@@ -2,29 +2,30 @@ package com.example.webapp.controllers;
 
 import com.example.webapp.entity.Ad;
 import com.example.webapp.entity.Campaign;
+import com.example.webapp.repo.AdRepository;
 import com.example.webapp.repo.CampaignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class CampaignController {
 
     @Autowired
     private CampaignRepository campaignRepository;
+    @Autowired
+    private AdRepository adRepository;
 
     @GetMapping("/campaigns")
     public String campaignsInfo(Model model) {
-        Iterable<Campaign> campaigns = campaignRepository.findAll();
+       List<Campaign> campaigns = campaignRepository.findAll();
         model.addAttribute("campaigns", campaigns);
         return "campaigns";
     }
@@ -45,11 +46,32 @@ public class CampaignController {
 
     @PostMapping("/campaigns/add")
     public String addCampaign(@RequestParam String name, @RequestParam("startDate")
-    @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate, @RequestParam("endDate")
-                              @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate, Model model) {
+    @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate, @RequestParam("endDate")
+                              @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate, Model model) {
         Campaign campaign = new Campaign(name, startDate, endDate);
         campaignRepository.save(campaign);
         return "redirect:/campaigns";
+    }
+
+    @GetMapping("/campaigns/{id}/ad-add")
+    public String adsadd(@PathVariable(value = "id") int campaignId, Model model) {
+        Campaign campaign = campaignRepository.findById(campaignId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Campaign having id " + campaignId + " not found"));
+        model.addAttribute("campaign", campaign);
+        return "campaign-ad-add";
+    }
+
+    @PostMapping("/campaigns/{id}/ad-add")
+    public String addad(@PathVariable(value = "id") int campaignId,
+                        @RequestParam String name, @RequestParam String assetUrl, Model model) {
+        Campaign campaign = campaignRepository.findById(campaignId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Campaign having id " + campaignId + " not found"));
+        Ad ad = new Ad(name, assetUrl, campaign);
+        adRepository.save(ad);
+        model.addAttribute("campaign", campaign);
+        return "redirect:/campaigns/{id}";
     }
 
     @GetMapping("/campaigns/{id}/edit")
@@ -63,8 +85,8 @@ public class CampaignController {
 
     @PostMapping("/campaigns/{id}/edit")
     public String campaignUpdate(@PathVariable(value = "id") int id, @RequestParam String name,
-                                 @RequestParam("startDate") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
-                                 @RequestParam("endDate") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate, Model model) {
+                                 @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                                 @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate, Model model) {
         Campaign campaign = campaignRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Campaign having id " + id + " not found"));
@@ -72,7 +94,7 @@ public class CampaignController {
         campaign.setStartDate(startDate);
         campaign.setEndDate(endDate);
         campaignRepository.save(campaign);
-        return "redirect:/campaigns";
+        return "redirect:/campaigns/{id}";
     }
 
     @PostMapping("/campaigns/{id}/remove")

@@ -5,8 +5,8 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Future;
 import java.time.LocalDate;
 import java.util.List;
-import static com.example.webapp.entity.Status.*;
 
+import static com.example.webapp.entity.Status.Active;
 
 @Entity
 @Table(name = "campaigns")
@@ -16,7 +16,6 @@ public class Campaign {
     private int id;
     private String name;
     private Status status;
-    @Future
     private LocalDate startDate;
     @Future
     private LocalDate endDate;
@@ -37,7 +36,8 @@ public class Campaign {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.status = Planned;
+        if(startDate.isBefore(LocalDate.now()))
+            status=Active;
     }
 
     public void setAds(List<Ad> ad) {
@@ -87,15 +87,4 @@ public class Campaign {
     public LocalDate getEndDate() {
         return endDate;
     }
-//    public void setStartDate(String startDate) {
-//        this.startDate = formatDate(startDate);
-//    }
-//    public void setEndDate(String endDate) {
-//        this.endDate = formatDate(endDate);
-//    }
-//    static LocalDate formatDate(String date){
-//        return LocalDate.parse(date,
-//                DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//    }
-
 }

@@ -2,8 +2,6 @@ package com.example.webapp.entity;
 
 import javax.persistence.*;
 
-import static com.example.webapp.entity.Status.Planned;
-
 @Entity
 @Table(name = "ads")
 public class Ad {
@@ -14,8 +12,18 @@ public class Ad {
     private Status status;
     private String assetUrl;
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    @JoinColumn (name="campaignId")
+    @JoinColumn (name="campaign_id")
     private Campaign campaign;
+
+    public Ad() {
+
+    }
+    public Ad(String name, String assetUrl,Campaign campaign) {
+        this.name = name;
+        this.status = campaign.getStatus();
+        this.assetUrl = assetUrl;
+        this.campaign = campaign;
+    }
 
     public Campaign getCampaign() {
         return campaign;
@@ -25,11 +33,7 @@ public class Ad {
         this.campaign = campaign;
     }
 
-    public Ad(String name, String assetUrl) {
-        this.name = name;
-        this.status = Planned;
-        this.assetUrl = assetUrl;
-    }
+
     public void setId(int id) {
         this.id = id;
     }
