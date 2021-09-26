@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/style.css"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Создание кампании</title>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-light bg-light">
+        <form class="container justify-content-start">
+            <button class="navbar-toggler" type="button">
+                <a href="../home.html" th:href="@{/src/main/resources}">To main page</a></button>
+            <button type="button" class="btn btn-light">
+                <a href="../info.html" th:href="@{/info}">Both SQL tables</a></button>
+            <button type="button" class="btn btn-light">
+                <a href="../ads.html" th:href="@{/ads}">Ads</a></button>
+            <button type="button" class="btn btn-light">
+                <a class="link" href="../campaigns.html" th:href="@{/campaigns}">Campaigns</a></button>
+        </form>
+    </nav>
+</header>
+<div class="container justify-content-start">
+    <h3>Campaign Adding</h3>
+    <form th:method="POST" th:action="@{/campaigns/add}" th:object="${campaignDto}">
+        <input type="text" th:field="*{name}" id="name"
+               placeholder="Enter the name of campaign" class="form-control"/>
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error">Error</div>
+        <input type="text" th:field="*{startDate}" id="startDate"
+               placeholder="Enter start date (pattern = yyyy-MM-dd)" class="form-control"/>
+        <div th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="error">Error</div>
+        <input type="text" th:field="*{endDate}" id="endDate"
+               placeholder="Enter end date (pattern = yyyy-MM-dd)" class="form-control"/>
+        <div th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="error">Error</div>
+        <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="error">Error</div>
+        <button type="submit" class="btn btn-success">Add campaign</button>
+    </form>
+</div>
+</body>
+</html>

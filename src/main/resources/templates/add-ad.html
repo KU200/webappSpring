@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/style.css"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Создание обьявления</title>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-light bg-light">
+        <form class="container justify-content-start">
+            <button class="navbar-toggler" type="button">
+                <a href="../home.html" th:href="@{/src/main/resources}">На главную</a></button>
+            <button type="button" class="btn btn-light">
+                <a href="../info.html" th:href="@{/info}">Обе SQL Таблицы</a></button>
+            <button type="button" class="btn btn-light">
+                <a href="../ads.html" th:href="@{/ads}">Обьявления</a></button>
+            <button type="button" class="btn btn-light">
+                <a class="link" href="../campaigns.html" th:href="@{/campaigns}">Кампании</a></button>
+        </form>
+    </nav>
+</header>
+<div class="container justify-content-start">
+    <h3>Ad adding</h3>
+    <form th:method="POST" th:action="@{/ads/add}" th:object="${adDto}">
+        <input type="text" th:field="*{name}" id="name"
+               placeholder="Enter ad name" class="form-control">
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error">Error</div>
+        <input type="text" th:field="*{assetUrl}" id="assetUrl"
+               placeholder="Enter link to this ad" class="form-control">
+        <div th:if="${#fields.hasErrors('assetUrl')}" th:errors="*{assetUrl}" class="error">Error</div>
+        <label for="campaignId">Select campaign</label>
+        <select class="form-control" th:field="${adDto.campaignId}" id="campaignId"/>
+        <option th:each="campaign : ${campaignsList}"
+                th:value="${campaign.getId()}"
+                th:text="${campaign.getName()}">
+        </option>
+        </select>
+        <div th:if="${#fields.hasErrors('campaignId')}" th:errors="*{campaignId}" class="error">Error</div>
+        <label>Select platforms (press Ctrl for multiple selection)</label>
+        <select class="form-control" th:field="${adDto.platformsIds}" multiple="multiple"/>
+        <option th:each="platform : ${platforms}"
+                th:value="${platform.getId()}"
+                th:text="${platform.getName()}">
+        </option>
+        </select>
+        <button type="submit" class="btn btn-success">Добавить обьявление</button>
+    </form>
+</div>
+</body>
+</html>

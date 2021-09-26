@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/style.css"/>
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование обьявления</title>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-light bg-light">
+        <form class="container justify-content-start">
+            <h3 class="caption">Редактирование обьявления <span th:text="${adDto.name}"></span></h3>
+            <button class="navbar-toggler" type="button">
+                <a href="../home.html" th:href="@{/src/main/resources}">На главную</a></button>
+            <button type="button" class="btn btn-light">
+                <a href="../info.html" th:href="@{/info}">Обе SQL Таблицы</a></button>
+            <button type="button" class="btn btn-light">
+                <a href="../ads.html" th:href="@{/ads}">Обьявления</a></button>
+            <button type="button" class="btn btn-light">
+                <a class="link" href="../campaigns.html" th:href="@{/campaigns}">Кампании</a></button>
+        </form>
+    </nav>
+</header>
+<form method="post">
+    <input type="text" th:value="${adDto.Name}" th:field="${adDto.Name}" placeholder="Введите название обьявления"
+           class="form-control">
+    <input type="text" th:value="${adDto.AssetUrl}" th:field="${adDto.AssetUrl}" placeholder="Введите ссылку на рекламу"
+           class="form-control">
+    <label>Select platforms</label>
+    <select class="form-control" th:field="${adDto.platformsIds}" multiple="multiple"/>
+    <option th:each="platform : ${platforms}"
+            th:value="${platform.getId()}"
+            th:selected="${adDto.platformsIds.contains(platform.getId())}"
+            th:text="${platform.getName()}">
+    </option>
+    </select>
+    <button type="submit" class="btn btn-success">Редактировать</button>
+</form>
+</body>
+</html>
