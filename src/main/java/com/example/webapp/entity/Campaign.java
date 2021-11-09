@@ -31,13 +31,10 @@ public class Campaign {
     @JsonIgnore
     @OneToMany(mappedBy = "campaign", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Ad> ads;
-    private Integer adsNumber = 0;
+    private Integer adsNumber;
 
     public Integer getAdsNumber() {
-        if (this.ads == null)
-            this.adsNumber = 0;
-        else this.adsNumber = ads.size();
-        return this.adsNumber;
+        return ads.size();
     }
 
     public void setAdsNumber(Integer adsNumber) {

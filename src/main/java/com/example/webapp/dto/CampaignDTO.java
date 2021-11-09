@@ -34,12 +34,12 @@ public class CampaignDTO {
     private List<Integer> adsIds;
     private List<String> adsNames;
 
-//    @AssertTrue
-//    public boolean isValid() {
-//        if (endDate.isBefore(startDate))
-//            return false;
-//        else return true;
-//    }
+    @AssertTrue
+    public boolean isValid() {
+        if (endDate.isBefore(startDate))
+            return false;
+        else return true;
+    }
     public CampaignDTO(Campaign campaign) {
         this.id = campaign.getId();
         this.name = campaign.getName();
