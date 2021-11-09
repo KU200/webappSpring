@@ -25,21 +25,10 @@ public class Campaign {
     @JsonIgnore
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
-    @JsonIgnore
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    @JsonIgnore
     @OneToMany(mappedBy = "campaign", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Ad> ads;
-    private Integer adsNumber;
-
-    public Integer getAdsNumber() {
-        return ads.size();
-    }
-
-    public void setAdsNumber(Integer adsNumber) {
-        this.adsNumber = adsNumber;
-    }
 
     public Campaign() {
     }

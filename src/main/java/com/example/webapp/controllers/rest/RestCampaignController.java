@@ -32,13 +32,14 @@ public class RestCampaignController {
             (@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "3") Integer size) {
         log.info(page);
         try {
-        List<Campaign> summaries = new ArrayList<Campaign>();
-        Pageable paging = PageRequest.of(page, size);
-        Page<Campaign> pageCampaigns = campaignRepository.findAll(paging);
-        summaries = pageCampaigns.getContent();
-        Map<String, Object> response = new HashMap<>();
-        response.put("summaries", summaries);
-        response.put("total pages", pageCampaigns.getTotalPages());
+            Pageable paging = PageRequest.of(page, size);
+            Page<Campaign> pageCampaigns = campaignRepository.findAll(paging);
+            List<CampaignDTO> summaries = pageCampaigns.getContent().stream()
+                    .map(CampaignDTO::new)
+                    .collect(Collectors.toList());
+            Map<String, Object> response = new HashMap<>();
+            response.put("summaries", summaries);
+            response.put("totalPages", pageCampaigns.getTotalPages());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

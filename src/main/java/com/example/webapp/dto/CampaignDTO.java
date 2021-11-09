@@ -4,6 +4,7 @@ import com.example.webapp.entity.Ad;
 import com.example.webapp.entity.Campaign;
 import com.example.webapp.entity.Platform;
 import com.example.webapp.entity.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,21 +26,24 @@ public class CampaignDTO {
     private String name;
     @NotNull(message = "The end date should be after the start date")
     private Status status;
+    @JsonIgnore
     @Future(message = "Start date must be in future")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    @JsonIgnore
     @Future(message = "End date must be in future")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    @JsonIgnore
     private List<Integer> adsIds;
+    @JsonIgnore
     private List<String> adsNames;
+    private Integer adsNumber;
 
-    @AssertTrue
-    public boolean isValid() {
-        if (endDate.isBefore(startDate))
-            return false;
-        else return true;
+    public Integer getAdsNumber() {
+        return adsIds.size();
     }
+
     public CampaignDTO(Campaign campaign) {
         this.id = campaign.getId();
         this.name = campaign.getName();
