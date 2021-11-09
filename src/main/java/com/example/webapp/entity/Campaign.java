@@ -1,5 +1,6 @@
 package com.example.webapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,12 +22,27 @@ public class Campaign {
     private int id;
     private String name;
     private Status status;
+    @JsonIgnore
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    @JsonIgnore
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    @JsonIgnore
     @OneToMany(mappedBy = "campaign", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Ad> ads;
+    private Integer adsNumber = 0;
+
+    public Integer getAdsNumber() {
+        if (this.ads == null)
+            this.adsNumber = 0;
+        else this.adsNumber = ads.size();
+        return this.adsNumber;
+    }
+
+    public void setAdsNumber(Integer adsNumber) {
+        this.adsNumber = adsNumber;
+    }
 
     public Campaign() {
     }
@@ -35,9 +51,9 @@ public class Campaign {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        if(startDate.isAfter(LocalDate.now()))
-            status=Planned;
-        else status=null;
+        if (startDate.isAfter(LocalDate.now()))
+            status = Planned;
+        else status = null;
     }
 
     public void setAds(List<Ad> ad) {

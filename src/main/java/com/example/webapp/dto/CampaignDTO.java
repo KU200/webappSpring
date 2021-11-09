@@ -2,6 +2,7 @@ package com.example.webapp.dto;
 
 import com.example.webapp.entity.Ad;
 import com.example.webapp.entity.Campaign;
+import com.example.webapp.entity.Platform;
 import com.example.webapp.entity.Status;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -48,11 +49,24 @@ public class CampaignDTO {
         this.adsIds = campaignAdsIds(campaign.getAds());
         this.adsNames = campaignAdsNames(campaign.getAds());
     }
-    List<Integer> campaignAdsIds(List<Ad> ads){
+    public static CampaignDTO toDTO(Campaign campaign) {
+        if (campaign == null)
+            return null;
+        CampaignDTO campaignDTO = new CampaignDTO();
+        campaignDTO.id = campaign.getId();
+        campaignDTO.name = campaign.getName();
+        campaignDTO.status = campaign.getStatus();
+        campaignDTO.startDate = campaign.getStartDate();
+        campaignDTO.endDate = campaign.getEndDate();
+        campaignDTO.adsIds = campaignAdsIds(campaign.getAds());
+        campaignDTO.adsNames = campaignAdsNames(campaign.getAds());
+        return campaignDTO;
+    }
+    static List<Integer> campaignAdsIds(List<Ad> ads){
         List<Integer> adsIdsList = ads.stream().map(ad -> ad.getId()).collect(Collectors.toList());
         return adsIdsList;
     }
-    List<String> campaignAdsNames(List<Ad> ads) {
+    static List<String> campaignAdsNames(List<Ad> ads) {
         List<String> adNamesList = ads.stream().map(ad -> ad.getName()).collect(Collectors.toList());
         return adNamesList;
     }
