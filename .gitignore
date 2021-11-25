@@ -12,7 +12,11 @@ target/
 .settings
 .springBeans
 .sts4-cache
+
+### Log4 ###
+folder.logs_IS_UNDEFINED/
 .log
+
 
 ### IntelliJ IDEA ###
 .idea

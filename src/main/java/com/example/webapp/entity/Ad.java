@@ -15,6 +15,7 @@ public class Ad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+//    @Enumerated(EnumType.STRING)
     private Status status;
     private String assetUrl;
     @ManyToOne(optional = false, cascade = CascadeType.ALL)

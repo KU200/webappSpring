@@ -21,6 +21,7 @@ public class Campaign {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+//    @Enumerated(EnumType.STRING)
     private Status status;
     @JsonIgnore
     @DateTimeFormat(pattern = "yyyy-MM-dd")

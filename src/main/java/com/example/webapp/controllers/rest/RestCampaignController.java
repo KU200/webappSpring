@@ -1,22 +1,17 @@
 package com.example.webapp.controllers.rest;
 
 import com.example.webapp.dto.CampaignDTO;
-import com.example.webapp.dto.PlatformDTO;
 import com.example.webapp.entity.Campaign;
 import com.example.webapp.repo.CampaignRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -29,14 +24,32 @@ public class RestCampaignController {
 
     @GetMapping("/summaries")
     public ResponseEntity<Map<String, Object>> campaignsSummaries
-            (@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "3") Integer size) {
-        log.info(page);
+            (@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "3") Integer size,
+             @RequestParam(defaultValue = "name") String sortingParam,
+             @RequestParam(defaultValue = "") String nameFilter,
+             @RequestParam(defaultValue = "") String statusFilter) {
         try {
-            Pageable paging = PageRequest.of(page, size);
-            Page<Campaign> pageCampaigns = campaignRepository.findAll(paging);
-            List<CampaignDTO> summaries = pageCampaigns.getContent().stream()
-                    .map(CampaignDTO::new)
-                    .collect(Collectors.toList());
+            List<CampaignDTO> summaries = new ArrayList<>();
+            Page<Campaign> pageCampaigns;
+            if (nameFilter != "" && statusFilter == "") {
+                Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
+                pageCampaigns = campaignRepository.findAllByName(nameFilter, paging);
+                summaries = (pageCampaigns.getContent().stream()
+                        .map(CampaignDTO::new)
+                        .collect(Collectors.toList()));
+            } else if (nameFilter == "" && statusFilter != "") {
+                Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
+                pageCampaigns = campaignRepository.findAllByStatus(statusFilter, paging);
+                summaries = pageCampaigns.getContent().stream()
+                        .map(CampaignDTO::new)
+                        .collect(Collectors.toList());
+            } else {
+                Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
+                pageCampaigns = campaignRepository.findAll(paging);
+                summaries = pageCampaigns.getContent().stream()
+                        .map(CampaignDTO::new)
+                        .collect(Collectors.toList());
+            }
             Map<String, Object> response = new HashMap<>();
             response.put("summaries", summaries);
             response.put("totalPages", pageCampaigns.getTotalPages());

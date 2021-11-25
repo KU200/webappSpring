@@ -5,6 +5,9 @@ import com.example.webapp.entity.Platform;
 import com.example.webapp.entity.Status;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
