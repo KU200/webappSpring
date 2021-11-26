@@ -24,20 +24,21 @@ public class RestCampaignController {
 
     @GetMapping("/summaries")
     public ResponseEntity<Map<String, Object>> campaignsSummaries
-            (@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "3") Integer size,
+            (@RequestParam(defaultValue = "0") Integer page,
+             @RequestParam(defaultValue = "3") Integer size,
              @RequestParam(defaultValue = "name") String sortingParam,
              @RequestParam(defaultValue = "") String nameFilter,
              @RequestParam(defaultValue = "") String statusFilter) {
         try {
             List<CampaignDTO> summaries = new ArrayList<>();
             Page<Campaign> pageCampaigns;
-            if (nameFilter != "" && statusFilter == "") {
+            if (!nameFilter.equals("") && statusFilter.equals("")) {
                 Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
                 pageCampaigns = campaignRepository.findAllByName(nameFilter, paging);
-                summaries = (pageCampaigns.getContent().stream()
+                summaries = pageCampaigns.getContent().stream()
                         .map(CampaignDTO::new)
-                        .collect(Collectors.toList()));
-            } else if (nameFilter == "" && statusFilter != "") {
+                        .collect(Collectors.toList());
+            } else if (nameFilter.equals("") && !statusFilter.equals("")) {
                 Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
                 pageCampaigns = campaignRepository.findAllByStatus(statusFilter, paging);
                 summaries = pageCampaigns.getContent().stream()
@@ -61,7 +62,8 @@ public class RestCampaignController {
 
     @PostMapping
     public CampaignDTO create(CampaignDTO campaignDto) {
-        Campaign campaign = new Campaign(campaignDto.getName(), campaignDto.getStartDate(), campaignDto.getEndDate());
+        Campaign campaign = new Campaign(campaignDto.getName(),
+                campaignDto.getStartDate(), campaignDto.getEndDate());
         campaign = campaignRepository.save(campaign);
         return new CampaignDTO(campaign);
     }
