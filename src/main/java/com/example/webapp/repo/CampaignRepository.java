@@ -16,13 +16,5 @@ public interface CampaignRepository extends JpaRepository<Campaign, Integer> {
 
     Page<Campaign> findAll(Pageable pageable);
     List<Campaign> findAll(Sort sort);
-
-    Page<Campaign> findAllByName(String name, Pageable pageable);
-
-    Page<Campaign> findAllByStatus(String status, Pageable pageable);
-//
-//    Page<Campaign> findAllByAdsNumber(Integer adsNumber, Pageable pageable);
-
-    @Query("select b from Campaign b where b.name = :name")
-    Campaign findByName(@Param("name") String name);
+    Page<Campaign> findByNameIgnoreCaseContainingOrStatusIn(String name, List<Status> foundStatuses, Pageable pageable);
 }

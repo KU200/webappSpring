@@ -2,13 +2,13 @@ package com.example.webapp.controllers.rest;
 
 import com.example.webapp.dto.CampaignDTO;
 import com.example.webapp.entity.Campaign;
+import com.example.webapp.entity.Status;
 import com.example.webapp.repo.CampaignRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -27,30 +27,22 @@ public class RestCampaignController {
             (@RequestParam(defaultValue = "0") Integer page,
              @RequestParam(defaultValue = "3") Integer size,
              @RequestParam(defaultValue = "name") String sortingParam,
-             @RequestParam(defaultValue = "") String nameFilter,
-             @RequestParam(defaultValue = "") String statusFilter) {
+             @RequestParam(defaultValue = "") String filter) {
         try {
-            List<CampaignDTO> summaries = new ArrayList<>();
             Page<Campaign> pageCampaigns;
-            if (!nameFilter.equals("") && statusFilter.equals("")) {
-                Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
-                pageCampaigns = campaignRepository.findAllByName(nameFilter, paging);
-                summaries = pageCampaigns.getContent().stream()
-                        .map(CampaignDTO::new)
+            Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
+            if (!filter.isEmpty()) {
+                List<Status> foundStatuses = Arrays.stream(Status.values())
+                        .filter(f -> f.name().toLowerCase().contains(filter.toLowerCase()))
                         .collect(Collectors.toList());
-            } else if (nameFilter.equals("") && !statusFilter.equals("")) {
-                Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
-                pageCampaigns = campaignRepository.findAllByStatus(statusFilter, paging);
-                summaries = pageCampaigns.getContent().stream()
-                        .map(CampaignDTO::new)
-                        .collect(Collectors.toList());
+                pageCampaigns = campaignRepository
+                        .findByNameIgnoreCaseContainingOrStatusIn(filter, foundStatuses, paging);
             } else {
-                Pageable paging = PageRequest.of(page, size, Sort.by(sortingParam));
                 pageCampaigns = campaignRepository.findAll(paging);
-                summaries = pageCampaigns.getContent().stream()
-                        .map(CampaignDTO::new)
-                        .collect(Collectors.toList());
             }
+            List<CampaignDTO> summaries = pageCampaigns.getContent().stream()
+                    .map(CampaignDTO::new)
+                    .collect(Collectors.toList());
             Map<String, Object> response = new HashMap<>();
             response.put("summaries", summaries);
             response.put("totalPages", pageCampaigns.getTotalPages());
